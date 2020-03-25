@@ -1,0 +1,80 @@
+public abstract class Colleague {
+
+    TestAbstractClass mediator;
+
+    /*User must implement*/
+    public void Colleague(TestAbstractClass testabstractclass) {
+    }
+}
+public abstract class Colleague {
+
+    TestAbstractClass mediator;
+
+    /*User must implement*/
+    public void Colleague(TestAbstractClass testabstractclass) {
+    }
+}
+public class Class01 extends TestAbstractClass {
+
+    /*User must implement*/
+    void setColleagues(ColleagueClass01 ColleagueClass01Object, ColleagueClass02 ColleagueClass02Object, ColleagueClass03 ColleagueClass03Object) {
+    }
+
+    private ColleagueClass01 ColleagueClass01Object;
+
+    private ColleagueClass02 ColleagueClass02Object;
+
+    private ColleagueClass03 ColleagueClass03Object;
+
+    /*User must implement*/
+    public void mediate(Colleague colleague) {
+    }
+}
+public class ColleagueClass01 extends Colleague {
+
+    private String state;
+
+    /*User must implement*/
+    public ColleagueClass01(TestAbstractClass mediator) {
+    }
+
+    /*User must implement.*/
+    public void getState() {
+    }
+
+    /*User must implement.*/
+    public void setState() {
+    }
+}
+public class ColleagueClass02 extends Colleague {
+
+    private String state;
+
+    /*User must implement*/
+    public ColleagueClass02(TestAbstractClass mediator) {
+    }
+
+    /*User must implement.*/
+    public void getState() {
+    }
+
+    /*User must implement.*/
+    public void setState() {
+    }
+}
+public class ColleagueClass03 extends Colleague {
+
+    private String state;
+
+    /*User must implement*/
+    public ColleagueClass03(TestAbstractClass mediator) {
+    }
+
+    /*User must implement.*/
+    public void getState() {
+    }
+
+    /*User must implement.*/
+    public void setState() {
+    }
+}

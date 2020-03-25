@@ -1,0 +1,18 @@
+<idea-plugin>
+    <id>org.cs474Hw2.DePaGenPlugin</id>
+    <name>Design Pattern Generator</name>
+    <vendor email="wisam.abunimeh@gmail.com" url="http://www.github.com/wisabi">Github.com/wisabi</vendor>
+
+    <description><![CDATA[
+    Generates Design patterns to a user's project.
+    ]]></description>
+
+
+    <depends>com.intellij.modules.platform</depends>
+
+
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="Design Pattern Generator"  anchor="right" factoryClass="com.cs474Hw2.TheToolWindow">
+        </toolWindow>
+    </extensions>
+</idea-plugin>

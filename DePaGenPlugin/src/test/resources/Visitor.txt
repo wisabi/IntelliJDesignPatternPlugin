@@ -1,0 +1,117 @@
+public interface TestInterface {
+
+    public abstract void meth01();
+
+    public abstract void meth02();
+
+    public abstract void meth03();
+}public class ConcreteClass01 implements TestInterface {
+
+    /*User must implement.*/
+    @Override()
+    public void meth01() {
+    }
+
+    /*User must implement.*/
+    @Override()
+    public void meth02() {
+    }
+
+    /*User must implement.*/
+    @Override()
+    public void meth03() {
+    }
+}
+public class ConcreteClass02 implements TestInterface {
+
+    /*User must implement.*/
+    @Override()
+    public void meth01() {
+    }
+
+    /*User must implement.*/
+    @Override()
+    public void meth02() {
+    }
+
+    /*User must implement.*/
+    @Override()
+    public void meth03() {
+    }
+}
+public class ConcreteClass03 implements TestInterface {
+
+    /*User must implement.*/
+    @Override()
+    public void meth01() {
+    }
+
+    /*User must implement.*/
+    @Override()
+    public void meth02() {
+    }
+
+    /*User must implement.*/
+    @Override()
+    public void meth03() {
+    }
+}
+public interface VisitorInterface {
+
+    public void visitConcreteClass01();
+
+    public void visitConcreteClass02();
+
+    public void visitConcreteClass03();
+}
+public class ConcreteVisitorClass01 implements VisitorInterface {
+
+    /*User must implement.*/
+    @Override()
+    public void ConcreteClass01() {
+    }
+
+    /*User must implement.*/
+    @Override()
+    public void ConcreteClass02() {
+    }
+
+    /*User must implement.*/
+    @Override()
+    public void ConcreteClass03() {
+    }
+}
+public class ConcreteVisitorClass02 implements VisitorInterface {
+
+    /*User must implement.*/
+    @Override()
+    public void ConcreteClass01() {
+    }
+
+    /*User must implement.*/
+    @Override()
+    public void ConcreteClass02() {
+    }
+
+    /*User must implement.*/
+    @Override()
+    public void ConcreteClass03() {
+    }
+}
+public class ConcreteVisitorClass03 implements VisitorInterface {
+
+    /*User must implement.*/
+    @Override()
+    public void ConcreteClass01() {
+    }
+
+    /*User must implement.*/
+    @Override()
+    public void ConcreteClass02() {
+    }
+
+    /*User must implement.*/
+    @Override()
+    public void ConcreteClass03() {
+    }
+}

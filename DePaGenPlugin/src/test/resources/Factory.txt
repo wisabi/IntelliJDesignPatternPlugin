@@ -1,0 +1,65 @@
+public interface TestInterface {
+
+    abstract public void meth01();
+
+    abstract public void meth02();
+
+    abstract public void meth03();
+}
+public class TestInterfaceFactory {
+
+    /*User must implement.*/
+    public TestInterface getTestInterface(String TestInterfaceType) {
+    }
+}
+public class Class01 implements TestInterface {
+
+    /*User must implement.*/
+    @Override()
+    public void meth01() {
+    }
+
+    /*User must implement.*/
+    @Override()
+    public void meth02() {
+    }
+
+    /*User must implement.*/
+    @Override()
+    public void meth03() {
+    }
+}
+public class Class02 implements TestInterface {
+
+    /*User must implement.*/
+    @Override()
+    public void meth01() {
+    }
+
+    /*User must implement.*/
+    @Override()
+    public void meth02() {
+    }
+
+    /*User must implement.*/
+    @Override()
+    public void meth03() {
+    }
+}
+public class Class03 implements TestInterface {
+
+    /*User must implement.*/
+    @Override()
+    public void meth01() {
+    }
+
+    /*User must implement.*/
+    @Override()
+    public void meth02() {
+    }
+
+    /*User must implement.*/
+    @Override()
+    public void meth03() {
+    }
+}

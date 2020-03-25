@@ -1,0 +1,34 @@
+public abstract class TestAbstractClass {
+
+    private TestAbstractClass successor;
+
+    /*User must implement*/
+    public TestAbstractClass(TestAbstractClass successor) {
+    }
+
+    /*User must implement*/
+    public void handleRequest() {
+    }
+
+    /*User must implement*/
+    public boolean canHandle Request() {
+    }
+}
+public class FinalClass01 {
+
+    /*User must implement*/
+    @override()
+    public void handleRequest() {
+    }
+}
+public class Class01 extends TestAbstractClass {
+
+    /*User must implement*/
+    public Class01(TestAbstractClass testabstractclassObject) {
+    }
+
+    /*User must implement*/
+    @override()
+    public void handleRequest() {
+    }
+}

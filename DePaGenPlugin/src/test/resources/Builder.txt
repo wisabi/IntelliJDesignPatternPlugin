@@ -1,0 +1,91 @@
+public class DirectorClass {
+
+    private ComplexObject ComplexObjectObject;
+
+    /*User must implement.*/
+    public DirectorClass(BuilderInterface builderinterfaceObject) {
+    }
+
+    /*User must implement.*/
+    public void construct() {
+    }
+}
+public interface BuilderInterface {
+
+    void BuilderInterfaceMethod01();
+
+    void BuilderInterfaceMethod02();
+
+    void BuilderInterfaceMethod03();
+
+    ComplexObject getResult();
+}
+/*User implement*/
+public class ComplexObject {
+}
+public class ConcreteBuilder01 implements BuilderInterface {
+
+    private ComplexObject complexobject;
+
+    /*User must implement.*/
+    ComplexObject getResult() {
+    }
+
+    /*User must implement.*/
+    public void BuilderInterfaceMethod01() {
+    }
+
+    /*User must implement.*/
+    public void BuilderInterfaceMethod02() {
+    }
+
+    /*User must implement.*/
+    public void BuilderInterfaceMethod03() {
+    }
+}
+public class ConcreteBuilder02 implements BuilderInterface {
+
+    private ComplexObject complexobject;
+
+    /*User must implement.*/
+    ComplexObject getResult() {
+    }
+
+    /*User must implement.*/
+    public void BuilderInterfaceMethod01() {
+    }
+
+    /*User must implement.*/
+    public void BuilderInterfaceMethod02() {
+    }
+
+    /*User must implement.*/
+    public void BuilderInterfaceMethod03() {
+    }
+}
+public class ConcreteBuilder03 implements BuilderInterface {
+
+    private ComplexObject complexobject;
+
+    /*User must implement.*/
+    ComplexObject getResult() {
+    }
+
+    /*User must implement.*/
+    public void BuilderInterfaceMethod01() {
+    }
+
+    /*User must implement.*/
+    public void BuilderInterfaceMethod02() {
+    }
+
+    /*User must implement.*/
+    public void BuilderInterfaceMethod03() {
+    }
+}
+public interface ProductInterface01 extends TopInterfaceName {
+}
+public interface ProductInterface02 extends TopInterfaceName {
+}
+public interface ProductInterface03 extends TopInterfaceName {
+}

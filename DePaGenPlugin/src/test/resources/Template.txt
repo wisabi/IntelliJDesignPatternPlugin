@@ -1,0 +1,71 @@
+public abstract class AbstractClass {
+
+    public abstract void meth01();
+
+    public abstract void meth02();
+
+    public abstract void meth03();
+
+    /*User must implement.*/
+    public void finalMethod01() {
+    }
+
+    /*User must implement.*/
+    public void finalMethod02() {
+    }
+
+    /*User must implement.*/
+    public void finalMethod03() {
+    }
+}
+public class ConcreteClass01 extends AbstractClass {
+
+    /*User must implement*/
+    @Override()
+    public void meth01() {
+    }
+
+    /*User must implement*/
+    @Override()
+    public void meth02() {
+    }
+
+    /*User must implement*/
+    @Override()
+    public void meth03() {
+    }
+}
+public class ConcreteClass02 extends AbstractClass {
+
+    /*User must implement*/
+    @Override()
+    public void meth01() {
+    }
+
+    /*User must implement*/
+    @Override()
+    public void meth02() {
+    }
+
+    /*User must implement*/
+    @Override()
+    public void meth03() {
+    }
+}
+public class ConcreteClass03 extends AbstractClass {
+
+    /*User must implement*/
+    @Override()
+    public void meth01() {
+    }
+
+    /*User must implement*/
+    @Override()
+    public void meth02() {
+    }
+
+    /*User must implement*/
+    @Override()
+    public void meth03() {
+    }
+}

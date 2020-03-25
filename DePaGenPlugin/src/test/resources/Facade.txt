@@ -1,0 +1,58 @@
+public abstract class TestAbstractClass {
+
+    public abstract void operation();
+}
+public class Class01 extends TestAbstractClass {
+
+    /*User must implement*/
+    @Override()
+    public void operation() {
+    }
+
+    void Class01(ForwardedClass01 ForwardedClass01Object, ForwardedClass02 ForwardedClass02Object, ForwardedClass03 ForwardedClass03Object) {
+    }
+
+    private ForwardedClass01 ForwardedClass01Object;
+
+    private ForwardedClass02 ForwardedClass02Object;
+
+    private ForwardedClass03 ForwardedClass03Object;
+}
+public class Class02 extends TestAbstractClass {
+
+    /*User must implement*/
+    @Override()
+    public void operation() {
+    }
+
+    void Class02(ForwardedClass01 ForwardedClass01Object, ForwardedClass02 ForwardedClass02Object, ForwardedClass03 ForwardedClass03Object) {
+    }
+
+    private ForwardedClass01 ForwardedClass01Object;
+
+    private ForwardedClass02 ForwardedClass02Object;
+
+    private ForwardedClass03 ForwardedClass03Object;
+}
+public class Class03 extends TestAbstractClass {
+
+    /*User must implement*/
+    @Override()
+    public void operation() {
+    }
+
+    void Class03(ForwardedClass01 ForwardedClass01Object, ForwardedClass02 ForwardedClass02Object, ForwardedClass03 ForwardedClass03Object) {
+    }
+
+    private ForwardedClass01 ForwardedClass01Object;
+
+    private ForwardedClass02 ForwardedClass02Object;
+
+    private ForwardedClass03 ForwardedClass03Object;
+}
+public class ForwardedClass01 {
+}
+public class ForwardedClass02 {
+}
+public class ForwardedClass03 {
+}

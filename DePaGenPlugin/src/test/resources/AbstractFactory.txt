@@ -1,0 +1,69 @@
+public interface TestInterface {
+
+    public void meth01();
+
+    public void meth02();
+
+    public void meth03();
+}
+public abstract class TestInterfaceAbstractFactory {
+
+    public abstract TestInterface getTestInterface();
+}
+public class TestInterfaceFactory extends TestInterfaceAbstractFactory {
+
+    @Override()
+    public TestInterface getTestInterface() {
+    }
+}
+public class Class01 implements TestInterface {
+
+    /*Implement*/
+    @Override()
+    public void meth01() {
+    }
+
+    /*Implement*/
+    @Override()
+    public void meth02() {
+    }
+
+    /*Implement*/
+    @Override()
+    public void meth03() {
+    }
+}
+public class Class02 implements TestInterface {
+
+    /*Implement*/
+    @Override()
+    public void meth01() {
+    }
+
+    /*Implement*/
+    @Override()
+    public void meth02() {
+    }
+
+    /*Implement*/
+    @Override()
+    public void meth03() {
+    }
+}
+public class Class03 implements TestInterface {
+
+    /*Implement*/
+    @Override()
+    public void meth01() {
+    }
+
+    /*Implement*/
+    @Override()
+    public void meth02() {
+    }
+
+    /*Implement*/
+    @Override()
+    public void meth03() {
+    }
+}
