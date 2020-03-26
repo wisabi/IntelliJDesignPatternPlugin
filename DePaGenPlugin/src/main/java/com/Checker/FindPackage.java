@@ -1,4 +1,4 @@
-package com.cs474Hw2;
+package com.Checker;
 import java.io.*;
 import java.util.*;
 public class FindPackage{

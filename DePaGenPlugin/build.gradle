@@ -14,6 +14,10 @@ repositories {
 }
 
 dependencies {
+    compile group: 'org.eclipse.core', name: 'org.eclipse.core.runtime', version: '3.7.0'
+    compile group: 'org.eclipse.core', name: 'org.eclipse.core.resources', version: '3.7.100'
+    compile group: 'org.eclipse.jdt', name: 'core', version: '3.3.0-v_771'
+
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testImplementation 'junit:junit:4.12'
     testCompile group: 'junit', name: 'junit', version: '4.12'
