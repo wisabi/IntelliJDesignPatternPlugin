@@ -61,7 +61,7 @@ public class FacadePage extends DesignPageTemplate {
         abstractFacadeField.setAlignmentX( Component.CENTER_ALIGNMENT);
         abstractFacadeField.setMaximumSize(new Dimension(250, 40));
         abstractFacadeField.addActionListener(abstractFacadeAction);
-
+        abstractFacadeField.setEnabled(false);
         //Configuring facade class field.
         JLabel textField02 = new JLabel
                 ("<html>" +
@@ -73,7 +73,7 @@ public class FacadePage extends DesignPageTemplate {
         facadeClassField.setAlignmentX( Component.CENTER_ALIGNMENT);//0.0
         facadeClassField.setMaximumSize(new Dimension(250, 40));
         facadeClassField.addActionListener(facadeClassAction);
-
+        facadeClassField.setEnabled(false);
         //Configuring forwarded class field.
         JLabel textField03 = new JLabel
                 ("<html>" +
@@ -85,6 +85,7 @@ public class FacadePage extends DesignPageTemplate {
         forwardedClassesField.setAlignmentX( Component.CENTER_ALIGNMENT);//0.0
         forwardedClassesField.setMaximumSize(new Dimension(250, 40));
         forwardedClassesField.addActionListener(forwardedClassesAction);
+        forwardedClassesField.setEnabled(false);
 
         //Configuring package field.
         JLabel textField04 = new JLabel
@@ -108,6 +109,9 @@ public class FacadePage extends DesignPageTemplate {
         //Adding components to panel.
         panel.add(textField00);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
+        panel.add(textField04);
+        panel.add(packageField);
+        panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(textField01);
         panel.add(abstractFacadeField);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -116,9 +120,6 @@ public class FacadePage extends DesignPageTemplate {
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(textField03);
         panel.add(forwardedClassesField);
-        panel.add(Box.createRigidArea(new Dimension(0, 10)));
-        panel.add(textField04);
-        panel.add(packageField);
         panel.add(Box.createRigidArea(new Dimension(0, 50)));
         panel.add(buildButton);
         panel.setVisible(true);
@@ -254,6 +255,9 @@ public class FacadePage extends DesignPageTemplate {
                 logger.trace("packageField is valid");
                 //locking field
                 packageField.setEnabled(false);
+                forwardedClassesField.setEnabled(true);
+                facadeClassField.setEnabled(true);
+                abstractFacadeField.setEnabled(true);
                 enteredPackage = true;
                 if(enteredAbstractFacadeField && enteredFacadeClassField && enteredForwardedField){
                     //Activate build button

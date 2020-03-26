@@ -62,6 +62,7 @@ public class TemplatePage extends DesignPageTemplate {
         abstractClassField.setAlignmentX( Component.CENTER_ALIGNMENT);
         abstractClassField.setMaximumSize(new Dimension(250, 40));
         abstractClassField.addActionListener(abstractClassAction);
+        abstractClassField.setEnabled(false);
 
         //Configuring abstract method field
         JLabel textField02 = new JLabel
@@ -74,6 +75,7 @@ public class TemplatePage extends DesignPageTemplate {
         abstractMethodField.setAlignmentX( Component.CENTER_ALIGNMENT);//0.0
         abstractMethodField.setMaximumSize(new Dimension(250, 40));
         abstractMethodField.addActionListener(abstractMethodAction);
+        abstractMethodField.setEnabled(false);
 
         //Configuring final method field
         JLabel textField03 = new JLabel
@@ -86,6 +88,7 @@ public class TemplatePage extends DesignPageTemplate {
         finalMethodField.setAlignmentX( Component.CENTER_ALIGNMENT);
         finalMethodField.setMaximumSize(new Dimension(250, 40));
         finalMethodField.addActionListener(finalMethodAction);
+        finalMethodField.setEnabled(false);
 
         //Configuring concrete class field
         JLabel textField05 = new JLabel
@@ -98,6 +101,7 @@ public class TemplatePage extends DesignPageTemplate {
         concreteClassField.setAlignmentX( Component.CENTER_ALIGNMENT);
         concreteClassField.setMaximumSize(new Dimension(250, 40));
         concreteClassField.addActionListener(concreteClassAction);
+        concreteClassField.setEnabled(false);
 
         //Configuring package field
         JLabel textField04 = new JLabel
@@ -121,6 +125,9 @@ public class TemplatePage extends DesignPageTemplate {
         //Adding components to panel.
         panel.add(textField00);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
+        panel.add(textField04);
+        panel.add(packageField);
+        panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(textField01);
         panel.add(abstractClassField);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -132,9 +139,6 @@ public class TemplatePage extends DesignPageTemplate {
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(textField05);
         panel.add(concreteClassField);
-        panel.add(Box.createRigidArea(new Dimension(0, 10)));
-        panel.add(textField04);
-        panel.add(packageField);
         panel.add(Box.createRigidArea(new Dimension(0, 50)));
         panel.add(buildButton);
         panel.setVisible(true);
@@ -299,7 +303,10 @@ public class TemplatePage extends DesignPageTemplate {
                 logger.trace("packageField is valid.");
                 packageField.setEnabled(false);
                 enteredPackage = true;
-
+                concreteClassField.setEnabled(true);
+                finalMethodField.setEnabled(true);
+                abstractMethodField.setEnabled(true);
+                abstractClassField.setEnabled(true);
                 if(enteredAbstractClass && enteredAbstractMethod && enteredFinalMethod && enteredConcreteClass) {
                     //Activate build button
                     buildButton.setEnabled(true);

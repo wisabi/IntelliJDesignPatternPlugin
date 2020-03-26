@@ -61,6 +61,7 @@ public class MediatorPage extends DesignPageTemplate {
         mediatorAbstractField.setAlignmentX( Component.CENTER_ALIGNMENT);//0.0
         mediatorAbstractField.setMaximumSize(new Dimension(250, 40));
         mediatorAbstractField.addActionListener(mediatorAbstractAction);
+        mediatorAbstractField.setEnabled(false);
 
         //Configuring mediator field.
         JLabel textField02 = new JLabel
@@ -73,6 +74,7 @@ public class MediatorPage extends DesignPageTemplate {
         mediatorField.setAlignmentX( Component.CENTER_ALIGNMENT);
         mediatorField.setMaximumSize(new Dimension(250, 40));
         mediatorField.addActionListener(mediatorAction);
+        mediatorField.setEnabled(false);
 
         //Configuring colleague field.
         JLabel textField03 = new JLabel
@@ -85,6 +87,7 @@ public class MediatorPage extends DesignPageTemplate {
         colleagueField.setAlignmentX( Component.CENTER_ALIGNMENT);
         colleagueField.setMaximumSize(new Dimension(250, 40));
         colleagueField.addActionListener(colleagueAction);
+        colleagueField.setEnabled(false);
 
         //Configuring package field.
         JLabel textField04 = new JLabel
@@ -108,6 +111,9 @@ public class MediatorPage extends DesignPageTemplate {
         //Adding components to panel.
         panel.add(textField00);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
+        panel.add(textField04);
+        panel.add(packageField);
+        panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(textField01);
         panel.add(mediatorAbstractField);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -116,9 +122,6 @@ public class MediatorPage extends DesignPageTemplate {
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(textField03);
         panel.add(colleagueField);
-        panel.add(Box.createRigidArea(new Dimension(0, 10)));
-        panel.add(textField04);
-        panel.add(packageField);
         panel.add(Box.createRigidArea(new Dimension(0, 50)));
         panel.add(buildButton);
         panel.setVisible(true);
@@ -256,8 +259,10 @@ public class MediatorPage extends DesignPageTemplate {
                 logger.trace("packageField is valid");
                 //Identifier valid and locking field
                 packageField.setEnabled(false);
+                colleagueField.setEnabled(true);
+                mediatorField.setEnabled(true);
+                mediatorAbstractField.setEnabled(true);
                 enteredPackage = true;
-
                 if(enteredMediatorAbstract && enteredMediator && enteredColleague){
                     //Activate build button
                     buildButton.setEnabled(true);

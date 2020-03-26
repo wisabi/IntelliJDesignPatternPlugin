@@ -64,6 +64,7 @@ public class VisitorPage extends DesignPageTemplate {
         elementInterfaceField.setAlignmentX( Component.CENTER_ALIGNMENT);
         elementInterfaceField.setMaximumSize(new Dimension(250, 40));
         elementInterfaceField.addActionListener(elementInterfaceAction);
+        elementInterfaceField.setEnabled(false);
 
         //Configuring element method field
         JLabel textField02 = new JLabel
@@ -76,6 +77,7 @@ public class VisitorPage extends DesignPageTemplate {
         elementMethodsField.setAlignmentX( Component.CENTER_ALIGNMENT);
         elementMethodsField.setMaximumSize(new Dimension(250, 40));
         elementMethodsField.addActionListener(elementMethodsAction);
+        elementMethodsField.setEnabled(false);
 
         //Configuring concrete element field.
         JLabel textField03 = new JLabel
@@ -88,6 +90,7 @@ public class VisitorPage extends DesignPageTemplate {
         concreteElementsField.setAlignmentX( Component.CENTER_ALIGNMENT);
         concreteElementsField.setMaximumSize(new Dimension(250, 40));
         concreteElementsField.addActionListener(concreteElementsAction);
+        concreteElementsField.setEnabled(false);
 
         //Configuring visitor interface field.
         JLabel textField05 = new JLabel
@@ -100,6 +103,7 @@ public class VisitorPage extends DesignPageTemplate {
         visitorInterfaceField.setAlignmentX( Component.CENTER_ALIGNMENT);
         visitorInterfaceField.setMaximumSize(new Dimension(250, 40));
         visitorInterfaceField.addActionListener(visitorInterfaceAction);
+        visitorInterfaceField.setEnabled(false);
 
         //Configuring concrete visitor field.
         JLabel textField06 = new JLabel
@@ -112,6 +116,7 @@ public class VisitorPage extends DesignPageTemplate {
         concreteVisitorsField.setAlignmentX( Component.CENTER_ALIGNMENT);
         concreteVisitorsField.setMaximumSize(new Dimension(250, 40));
         concreteVisitorsField.addActionListener(concreteVisitorsAction);
+        concreteVisitorsField.setEnabled(false);
 
         //Configuring package field.
         JLabel textField04 = new JLabel
@@ -135,6 +140,10 @@ public class VisitorPage extends DesignPageTemplate {
         //Adding components to panel.
         panel.add(textField00);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
+        panel.add(textField04);
+        panel.add(packageField);
+        panel.add(Box.createRigidArea(new Dimension(0, 10)));
+
         panel.add(textField01);
         panel.add(elementInterfaceField);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -149,9 +158,6 @@ public class VisitorPage extends DesignPageTemplate {
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(textField06);
         panel.add(concreteVisitorsField);
-        panel.add(Box.createRigidArea(new Dimension(0, 10)));
-        panel.add(textField04);
-        panel.add(packageField);
         panel.add(Box.createRigidArea(new Dimension(0, 50)));
         panel.add(buildButton);
         panel.setVisible(true);
@@ -322,7 +328,11 @@ public class VisitorPage extends DesignPageTemplate {
                 logger.trace("packageField is valid.");
                 packageField.setEnabled(false);
                 enteredPackage = true;
-
+                concreteVisitorsField.setEnabled(true);
+                visitorInterfaceField.setEnabled(true);
+                concreteElementsField.setEnabled(true);
+                elementMethodsField.setEnabled(true);
+                elementInterfaceField.setEnabled(true);
                 if(enteredElementInterface && enteredElementMethods && enteredVisitorInterface && enteredConcreteElements && enteredConcreteVisitors){
                     //Activate build button
                     buildButton.setEnabled(true);

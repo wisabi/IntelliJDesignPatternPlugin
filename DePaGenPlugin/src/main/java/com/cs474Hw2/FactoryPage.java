@@ -60,6 +60,7 @@ public class FactoryPage extends DesignPageTemplate {
         interfaceField.setAlignmentX( Component.CENTER_ALIGNMENT);
         interfaceField.setMaximumSize(new Dimension(250, 40));
         interfaceField.addActionListener(interfaceAction);
+        interfaceField.setEnabled(false);
 
         //Configuring class field.
         JLabel textField02 = new JLabel
@@ -72,6 +73,7 @@ public class FactoryPage extends DesignPageTemplate {
         classField.setAlignmentX( Component.CENTER_ALIGNMENT);
         classField.setMaximumSize(new Dimension(250, 40));
         classField.addActionListener(classAction);
+        classField.setEnabled(false);
 
         //Configuring method field.
         JLabel textField03 = new JLabel
@@ -84,6 +86,7 @@ public class FactoryPage extends DesignPageTemplate {
         methodField.setAlignmentX( Component.CENTER_ALIGNMENT);
         methodField.setMaximumSize(new Dimension(250, 40));
         methodField.addActionListener(methodAction);
+        methodField.setEnabled(false);
 
         //Configuring package field.
         JLabel textField04 = new JLabel
@@ -107,6 +110,9 @@ public class FactoryPage extends DesignPageTemplate {
         //Adding components to panel.
         panel.add(textField00);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
+        panel.add(textField04);
+        panel.add(packageField);
+        panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(textField01);
         panel.add(interfaceField);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -115,9 +121,6 @@ public class FactoryPage extends DesignPageTemplate {
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(textField03);
         panel.add(methodField);
-        panel.add(Box.createRigidArea(new Dimension(0, 10)));
-        panel.add(textField04);
-        panel.add(packageField);
         panel.add(Box.createRigidArea(new Dimension(0, 50)));
         panel.add(buildButton);
         panel.setVisible(true);
@@ -240,6 +243,9 @@ public class FactoryPage extends DesignPageTemplate {
                 //Identifier valid and clearing field/
                 logger.trace("packageField is valid");
                 packageField.setEnabled(false);
+                methodField.setEnabled(true);
+                classField.setEnabled(true);
+                interfaceField.setEnabled(true);
                 enteredPackage = true;
                 if(enteredMethods && enteredClass && enteredInterface){
                     //Activate build button

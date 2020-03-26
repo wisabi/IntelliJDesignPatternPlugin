@@ -10,6 +10,8 @@ import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
+import java.io.File;
+
 /**
  * Implementing ToolWindowFactory as an application starting point.
  */
@@ -39,7 +41,9 @@ public class TheToolWindow implements ToolWindowFactory {
         //Getting user's project root path.
         logger.trace("Getting path to user's project in Intellij.");
         VirtualFile virtualFile = ModuleRootManager.getInstance(ModuleManager.getInstance(project).getModules()[0]).getContentRoots()[0];
-        projectPath = virtualFile.getPath();
+        projectPath = virtualFile.getPath() + "/src";
+
+
         logger.trace("User's project path: {}", projectPath);
 
         //Saving the the toolWindow.

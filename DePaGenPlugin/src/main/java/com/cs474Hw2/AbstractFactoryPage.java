@@ -68,6 +68,7 @@ public class AbstractFactoryPage extends  DesignPageTemplate{
         interfaceField.setAlignmentX( Component.CENTER_ALIGNMENT);//0.0
         interfaceField.setMaximumSize(new Dimension(250, 40));
         interfaceField.addActionListener(interfaceAction);
+        interfaceField.setEnabled(false);
 
         //Configuring class field.
         JLabel textField02 = new JLabel
@@ -80,6 +81,7 @@ public class AbstractFactoryPage extends  DesignPageTemplate{
         classField.setAlignmentX( Component.CENTER_ALIGNMENT);//0.0
         classField.setMaximumSize(new Dimension(250, 40));
         classField.addActionListener(classAction);
+        classField.setEnabled(false);
 
         //Configuring method field.
         JLabel textField03 = new JLabel
@@ -92,6 +94,7 @@ public class AbstractFactoryPage extends  DesignPageTemplate{
         methodField.setAlignmentX( Component.CENTER_ALIGNMENT);//0.0
         methodField.setMaximumSize(new Dimension(250, 40));
         methodField.addActionListener(methodAction);
+        methodField.setEnabled(false);
 
         //Configuring package field.
         JLabel textField04 = new JLabel
@@ -115,6 +118,9 @@ public class AbstractFactoryPage extends  DesignPageTemplate{
         //Adding components to panel.
         panel.add(textField00);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
+        panel.add(textField04);
+        panel.add(packageField);
+        panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(textField01);
         panel.add(interfaceField);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -123,9 +129,6 @@ public class AbstractFactoryPage extends  DesignPageTemplate{
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(textField03);
         panel.add(methodField);
-        panel.add(Box.createRigidArea(new Dimension(0, 10)));
-        panel.add(textField04);
-        panel.add(packageField);
         panel.add(Box.createRigidArea(new Dimension(0, 50)));
         panel.add(buildButton);
         panel.setVisible(true);
@@ -261,9 +264,15 @@ public class AbstractFactoryPage extends  DesignPageTemplate{
                     packageField.setText("");
                     return;
                 }
+
+                abstractFactoryBuilder.setPath(WelcomePage.path);
+
                 //Identifier valid and locking field/
                 packageField.setEnabled(false);
                 enteredPackage = true;
+                interfaceField.setEnabled(true);
+                classField.setEnabled(true);
+                methodField.setEnabled(true);
                 logger.trace("packageField is valid");
                 if(enteredMethods && enteredClass && enteredInterface){
                     //Activate build button

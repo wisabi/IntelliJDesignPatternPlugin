@@ -61,7 +61,7 @@ public class ChainPage extends DesignPageTemplate {
         abstractHandlerField.setAlignmentX(Component.CENTER_ALIGNMENT);
         abstractHandlerField.setMaximumSize(new Dimension(250, 40));
         abstractHandlerField.addActionListener(abstractHandlerAction);
-
+        abstractHandlerField.setEnabled(false);
         //Configuring final receiver field.
         JLabel textField02 = new JLabel
                 ("<html>" +
@@ -73,6 +73,7 @@ public class ChainPage extends DesignPageTemplate {
         finalReceiverField.setAlignmentX(Component.CENTER_ALIGNMENT);//0.0
         finalReceiverField.setMaximumSize(new Dimension(250, 40));
         finalReceiverField.addActionListener(finalReceiverAction);
+        finalReceiverField.setEnabled(false);
 
         //Configuring receiver field.
         JLabel textField03 = new JLabel
@@ -85,6 +86,7 @@ public class ChainPage extends DesignPageTemplate {
         receiverField.setAlignmentX(Component.CENTER_ALIGNMENT);
         receiverField.setMaximumSize(new Dimension(250, 40));
         receiverField.addActionListener(receiverAction);
+        receiverField.setEnabled(false);
 
         //Configuring package field. 
         JLabel textField04 = new JLabel
@@ -108,6 +110,9 @@ public class ChainPage extends DesignPageTemplate {
         //Adding components to panel.
         panel.add(textField00);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
+        panel.add(textField04);
+        panel.add(packageField);
+        panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(textField01);
         panel.add(abstractHandlerField);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -116,9 +121,6 @@ public class ChainPage extends DesignPageTemplate {
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(textField03);
         panel.add(receiverField);
-        panel.add(Box.createRigidArea(new Dimension(0, 10)));
-        panel.add(textField04);
-        panel.add(packageField);
         panel.add(Box.createRigidArea(new Dimension(0, 50)));
         panel.add(buildButton);
         panel.setVisible(true);
@@ -260,6 +262,9 @@ public class ChainPage extends DesignPageTemplate {
                 logger.trace("packageField is valid.");
                 packageField.setEnabled(false);
                 enteredPackage = true;
+                abstractHandlerField.setEnabled(true);
+                finalReceiverField.setEnabled(true);
+                receiverField.setEnabled(true);
                 if (enteredAbstractHandler && enteredReceiver && enteredFinalReceiver) {
                     //Activate build button
                     buildButton.setEnabled(true);

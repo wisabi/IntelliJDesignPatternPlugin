@@ -68,6 +68,7 @@ public class BuilderPage extends  DesignPageTemplate{
         directorField.setAlignmentX( Component.CENTER_ALIGNMENT);//0.0
         directorField.setMaximumSize(new Dimension(250, 40));
         directorField.addActionListener(directorFieldAction);
+        directorField.setEnabled(false);
 
         //Configuring builder interface field
         JLabel textField02 = new JLabel
@@ -80,6 +81,7 @@ public class BuilderPage extends  DesignPageTemplate{
         builderInterfaceField.setAlignmentX( Component.CENTER_ALIGNMENT);//0.0
         builderInterfaceField.setMaximumSize(new Dimension(250, 40));
         builderInterfaceField.addActionListener(builderInterfaceFieldAction);
+        builderInterfaceField.setEnabled(false);
 
         //Configuring builder interface method field
         JLabel textField03 = new JLabel
@@ -92,6 +94,7 @@ public class BuilderPage extends  DesignPageTemplate{
         builderInterfaceMethodsField.setAlignmentX( Component.CENTER_ALIGNMENT);//0.0
         builderInterfaceMethodsField.setMaximumSize(new Dimension(250, 40));
         builderInterfaceMethodsField.addActionListener(builderInterfaceMethodsFieldAction);
+        builderInterfaceMethodsField.setEnabled(false);
 
         //Configuring concrete builder field.
         JLabel textField05 = new JLabel
@@ -104,6 +107,7 @@ public class BuilderPage extends  DesignPageTemplate{
         concreteBuilderField.setAlignmentX( Component.CENTER_ALIGNMENT);//0.0
         concreteBuilderField.setMaximumSize(new Dimension(250, 40));
         concreteBuilderField.addActionListener(concreteBuilderFieldAction);
+        concreteBuilderField.setEnabled(false);
 
         //Configuring complex object field.
         JLabel textField06 = new JLabel
@@ -116,6 +120,7 @@ public class BuilderPage extends  DesignPageTemplate{
         complexObjectField.setAlignmentX( Component.CENTER_ALIGNMENT);//0.0
         complexObjectField.setMaximumSize(new Dimension(250, 40));
         complexObjectField.addActionListener(complexObjectFieldAction);
+        complexObjectField.setEnabled(false);
 
         //Configuring top product interface field.
         JLabel textField07 = new JLabel
@@ -128,6 +133,7 @@ public class BuilderPage extends  DesignPageTemplate{
         topProductInterfaceField.setAlignmentX( Component.CENTER_ALIGNMENT);//0.0
         topProductInterfaceField.setMaximumSize(new Dimension(250, 40));
         topProductInterfaceField.addActionListener(topProductInterfaceFieldAction);
+        topProductInterfaceField.setEnabled(false);
 
         //Configuring top product interface method field.
         JLabel textField08 = new JLabel
@@ -140,6 +146,7 @@ public class BuilderPage extends  DesignPageTemplate{
         topProductInterfaceMethodField.setAlignmentX( Component.CENTER_ALIGNMENT);//0.0
         topProductInterfaceMethodField.setMaximumSize(new Dimension(250, 40));
         topProductInterfaceMethodField.addActionListener(topProductInterfaceMethodFieldAction);
+        topProductInterfaceMethodField.setEnabled(false);
 
         //Configuring product interface method field.
         JLabel textField09= new JLabel
@@ -152,6 +159,7 @@ public class BuilderPage extends  DesignPageTemplate{
         productInterfaceField.setAlignmentX( Component.CENTER_ALIGNMENT);//0.0
         productInterfaceField.setMaximumSize(new Dimension(250, 40));
         productInterfaceField.addActionListener(productInterfaceAction);
+        productInterfaceField.setEnabled(false);
 
         //Configuring package field.
         JLabel textField04 = new JLabel
@@ -177,6 +185,9 @@ public class BuilderPage extends  DesignPageTemplate{
         //Adding components to panel.
         panel.add(textField00);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
+        panel.add(textField04);
+        panel.add(packageField);
+        panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(textField01);
         panel.add(directorField);
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -200,10 +211,8 @@ public class BuilderPage extends  DesignPageTemplate{
         panel.add(Box.createRigidArea(new Dimension(0, 10)));
         panel.add(textField09);
         panel.add(productInterfaceField);
-        panel.add(Box.createRigidArea(new Dimension(0, 10)));
-        panel.add(textField04);
-        panel.add(packageField);
         panel.add(Box.createRigidArea(new Dimension(0, 80)));
+
         panel.add(buildButton);
         panel.setVisible(true);
         logger.trace("Builder GUI panel created with components.");
@@ -469,6 +478,14 @@ public class BuilderPage extends  DesignPageTemplate{
                 //Identifier valid and locking field
                 packageField.setEnabled(false);
                 enteredPackage = true;
+                directorField.setEnabled(true);
+                builderInterfaceField.setEnabled(true);
+                builderInterfaceMethodsField.setEnabled(true);
+                concreteBuilderField.setEnabled(true);
+                complexObjectField.setEnabled(true);
+                topProductInterfaceField.setEnabled(true);
+                topProductInterfaceMethodField.setEnabled(true);
+                productInterfaceField.setEnabled(true);
                 logger.trace("packageField is valid.");
                 if(enteredDirector && enteredBuilderInterface && enteredBuilderMethod && enteredConcreteBuilder&&
                         enteredComplexObject && enteredTopProductInterface && enteredTopProductInterfaceMethod &&
