@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
 public class WelcomePage {
 
     static JPanel panel;
-    static JFrame frame;
+    public static JFrame frame;
     static ComboBox<String> selectBox;
     ActionListener patternSelectionAction, nextButtonAction;
     static JButton nextButton;

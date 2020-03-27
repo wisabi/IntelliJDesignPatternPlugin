@@ -41,7 +41,6 @@ public class Checker {
             //Only checking java files.
             else if(file.getName().contains(".java")){
                 try {
-                    System.out.println(file.getName() + "  " + file.getPath());
                     parseFile(file);
                 } catch (Exception e) {
                     logger.trace("EXCEPTION: {}", e.toString());
@@ -102,8 +101,6 @@ public class Checker {
             }
             if(getNext){
                 getNext=false;
-                System.out.println(file.getParent());
-                System.out.println(set.toString());
                 /*Saving names in a mapping where the key is the absolute path.
                   Absolute path is unique for each package, and only unique
                   class/enum/interface names can be within a package*/
