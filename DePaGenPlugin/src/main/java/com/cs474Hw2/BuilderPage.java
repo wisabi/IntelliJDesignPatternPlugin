@@ -1,4 +1,6 @@
 package com.cs474Hw2;
+import com.Checker.Checker;
+import com.Checker.FindPackage;
 import com.DesignPatternFactory.Builder;
 import com.DesignPatternFactory.Log;
 import com.intellij.ui.content.ContentFactory;
@@ -7,6 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.HashSet;
 
 public class BuilderPage extends  DesignPageTemplate{
 
@@ -27,6 +31,12 @@ public class BuilderPage extends  DesignPageTemplate{
     JButton buildButton;
     JPanel panel;
     Logger logger;
+    Checker checker;
+    String packagePath;
+    boolean checkClashes;
+    File packageFile;
+    HashSet<String> identifiers, builderMethods, productMethods;
+
 
     BuilderPage(){
         //Get logger.
@@ -37,6 +47,12 @@ public class BuilderPage extends  DesignPageTemplate{
         logger.trace("Setting up Builder generator.");
         builderBuilder = new Builder();
         builderBuilder.setPath(WelcomePage.path);
+
+        checker = new Checker();
+        identifiers = new HashSet<>();
+        builderMethods = new HashSet<>();
+        productMethods = new HashSet<>();
+
 
         //Set the path of the user's project root.
         logger.trace("Calling event handler setup.");
@@ -236,6 +252,15 @@ public class BuilderPage extends  DesignPageTemplate{
             public void actionPerformed(ActionEvent actionEvent) {
                 String director = directorField.getText();
                 logger.trace("directorField entered: {}", director);
+
+                //Checking for name clashes
+                logger.trace("Checking name clashes.");
+                if(!checkClashes(checkClashes, checker, packagePath, packageFile, WelcomePage.frame, director, directorField,  identifiers)){
+                    //Clash found
+                    logger.trace("Name clashes found.");
+                    return;
+                }
+
                 //Check if identifier is valid.
                 if(!builderBuilder.setDirectorName(director)){
                     logger.trace("directorField is invalid");
@@ -244,6 +269,7 @@ public class BuilderPage extends  DesignPageTemplate{
                     return;
                 }
                 //Identifier valid and locking field
+                identifiers.add(director);
                 directorField.setEnabled(false);
                 enteredDirector = true;
                 logger.trace("directorField is valid");
@@ -262,6 +288,15 @@ public class BuilderPage extends  DesignPageTemplate{
             public void actionPerformed(ActionEvent actionEvent) {
                 String builderInterface = builderInterfaceField.getText();
                 logger.trace("builderInterfaceField is entered: {}", builderInterface);
+
+                //Checking for name clashes
+                logger.trace("Checking name clashes.");
+                if(!checkClashes(checkClashes, checker, packagePath, packageFile, WelcomePage.frame, builderInterface, builderInterfaceField,  identifiers)){
+                    //Clash found
+                    logger.trace("Name clashes found.");
+                    return;
+                }
+
                 //Check if identifier is valid.
                 if(!builderBuilder.setBuilderInterfaceName(builderInterface)){
                     logger.trace("builderInterfaceField is invalid.");
@@ -270,6 +305,7 @@ public class BuilderPage extends  DesignPageTemplate{
                     return;
                 }
                 //Identifier valid and locking field
+                identifiers.add(builderInterface);
                 builderInterfaceField.setEnabled(false);
                 enteredBuilderInterface = true;
                 logger.trace("builderInterfaceField is valid.");
@@ -288,6 +324,16 @@ public class BuilderPage extends  DesignPageTemplate{
             public void actionPerformed(ActionEvent actionEvent) {
                 String builderInterfaceMethod = builderInterfaceMethodsField.getText();
                 logger.trace("builderInterfaceMethodsField is entered: {}.", builderInterfaceMethod);
+
+                //Checking method name clashes;
+                logger.trace("Checking method name clashes.");
+                if(builderMethods.contains(builderInterfaceMethod)){
+                    logger.trace("methodField is invalid.");
+                    JOptionPane.showMessageDialog(WelcomePage.frame, "ERROR: Name Clash!", "",  JOptionPane.ERROR_MESSAGE);
+                    builderInterfaceMethodsField.setText("");
+                    return;
+                }
+
                 //Check if identifier is valid.
                 if(!builderBuilder.setDirectorName(builderInterfaceMethod)){
                     logger.trace("builderInterfaceMethodsField is invalid.");
@@ -296,6 +342,7 @@ public class BuilderPage extends  DesignPageTemplate{
                     return;
                 }
                 //Identifier valid and clearing field
+                builderMethods.add(builderInterfaceMethod);
                 builderInterfaceMethodsField.setText("");
                 enteredBuilderMethod = true;
                 logger.trace("builderInterfaceMethodsField is valid.");
@@ -314,6 +361,15 @@ public class BuilderPage extends  DesignPageTemplate{
             public void actionPerformed(ActionEvent actionEvent) {
                 String concreteBuilder = concreteBuilderField.getText();
                 logger.trace("concreteBuilderField is entered: {}", concreteBuilder);
+
+                //Checking for name clashes
+                logger.trace("Checking name clashes.");
+                if(!checkClashes(checkClashes, checker, packagePath, packageFile, WelcomePage.frame, concreteBuilder, concreteBuilderField,  identifiers)){
+                    //Clash found
+                    logger.trace("Name clashes found.");
+                    return;
+                }
+
                 //Check if identifier is valid.
                 if(!builderBuilder.setConcreteBuilderNames(concreteBuilder)){
                     logger.trace("concreteBuilderField is invalid.");
@@ -322,6 +378,7 @@ public class BuilderPage extends  DesignPageTemplate{
                     return;
                 }
                 //Identifier valid and clearing field
+                identifiers.add(concreteBuilder);
                 concreteBuilderField.setText("");
                 enteredConcreteBuilder = true;
                 logger.trace("concreteBuilderField is valid.");
@@ -340,6 +397,15 @@ public class BuilderPage extends  DesignPageTemplate{
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 String complexObject = complexObjectField.getText();
+
+                //Checking for name clashes
+                logger.trace("Checking name clashes.");
+                if(!checkClashes(checkClashes, checker, packagePath, packageFile, WelcomePage.frame, complexObject, complexObjectField,  identifiers)){
+                    //Clash found
+                    logger.trace("Name clashes found.");
+                    return;
+                }
+
                 //Check if identifier is valid.
                 logger.trace("complexObjectField is entered: {}", complexObject);
                 if(!builderBuilder.setComplexObjectName(complexObject)){
@@ -349,6 +415,7 @@ public class BuilderPage extends  DesignPageTemplate{
                     return;
                 }
                 //Identifier valid and locking field
+                identifiers.add(complexObject);
                 complexObjectField.setEnabled(false);
                 enteredComplexObject = true;
                 logger.trace("complexObjectField is valid.");
@@ -368,6 +435,15 @@ public class BuilderPage extends  DesignPageTemplate{
             public void actionPerformed(ActionEvent actionEvent) {
                 String topProductInterface = topProductInterfaceField.getText();
                 logger.trace("topProductInterfaceField is entered: {}", topProductInterface);
+
+                //Checking for name clashes
+                logger.trace("Checking name clashes.");
+                if(!checkClashes(checkClashes, checker, packagePath, packageFile, WelcomePage.frame, topProductInterface, topProductInterfaceField,  identifiers)){
+                    //Clash found
+                    logger.trace("Name clashes found.");
+                    return;
+                }
+
                 //Check if identifier is valid.
                 if(!builderBuilder.setTopProductInterfaceName(topProductInterface)){
                     logger.trace("topProductInterfaceField is invalid.");
@@ -376,6 +452,7 @@ public class BuilderPage extends  DesignPageTemplate{
                     return;
                 }
                 //Identifier valid and locking field
+                identifiers.add(topProductInterface);
                 topProductInterfaceField.setEnabled(false);
                 enteredTopProductInterface = true;
                 logger.trace("topProductInterfaceField is valid.");
@@ -394,6 +471,16 @@ public class BuilderPage extends  DesignPageTemplate{
             public void actionPerformed(ActionEvent actionEvent) {
                 String topProductInterface = topProductInterfaceMethodField.getText();
                 logger.trace("topProductInterfaceMethodField is entered: {}", topProductInterface);
+
+                //Checking method name clashes;
+                logger.trace("Checking method name clashes.");
+                if(productMethods.contains(topProductInterface)){
+                    logger.trace("methodField is invalid.");
+                    JOptionPane.showMessageDialog(WelcomePage.frame, "ERROR: Name Clash!", "",  JOptionPane.ERROR_MESSAGE);
+                    builderInterfaceMethodsField.setText("");
+                    return;
+                }
+
                 //Check if identifier is valid.
                 if(!builderBuilder.setTopProductInterfaceName(topProductInterface)){
                     logger.trace("topProductInterfaceMethodField is invalid.");
@@ -401,7 +488,9 @@ public class BuilderPage extends  DesignPageTemplate{
                     topProductInterfaceMethodField.setText("");
                     return;
                 }
+
                 //Identifier valid and clearing field
+                productMethods.add(topProductInterface);
                 topProductInterfaceMethodField.setText("");
                 enteredTopProductInterfaceMethod = true;
                 logger.trace("topProductInterfaceMethodField is valid.");
@@ -420,6 +509,15 @@ public class BuilderPage extends  DesignPageTemplate{
             public void actionPerformed(ActionEvent actionEvent) {
                 String productInterface = productInterfaceField.getText();
                 logger.trace("productInterfaceField is entered: {}", productInterface);
+
+                //Checking for name clashes
+                logger.trace("Checking name clashes.");
+                if(!checkClashes(checkClashes, checker, packagePath, packageFile, WelcomePage.frame, productInterface, productInterfaceField,  identifiers)){
+                    //Clash found
+                    logger.trace("Name clashes found.");
+                    return;
+                }
+
                 //Check if identifier is valid.
                 if(!builderBuilder.setProductInterfaceNames(productInterface)){
                     logger.trace("productInterfaceField is invalid.");
@@ -428,6 +526,7 @@ public class BuilderPage extends  DesignPageTemplate{
                     return;
                 }
                 //Identifier valid and clearing field
+                identifiers.add(productInterface);
                 enteredProductInterface = true;
                 productInterfaceField.setText("");
                 logger.trace("productInterfaceField is valid.");
@@ -468,13 +567,30 @@ public class BuilderPage extends  DesignPageTemplate{
             public void actionPerformed(ActionEvent actionEvent) {
                 String packageName = packageField.getText();
                 logger.trace("packageField is entered: {}", packageName);
-                //Check if identifier is valid.
-                if(!builderBuilder.setFolderName(packageName)){
-                    logger.trace("packageField is invalid.");
+                logger.trace("Looking if package exists.");
+                packagePath = FindPackage.findPackage(packageName, new File(WelcomePage.path));
+
+                //Check if package already exists. Parse package if exists.
+                logger.trace("Checking if package exists in project.");
+                if(packagePath != null){
+                    logger.trace("Checking if package exists in project.");
+                    packageFile = new File(packagePath);
+                    builderBuilder.setPath(packageFile.getParentFile().getAbsolutePath());
+                    builderBuilder.setFolderName(packageName);
+                    checkClashes = true;
+                }
+                //Check if identifier is valid
+                else if(!builderBuilder.setFolderName(packageName)){
+                    logger.trace("packageField is invalid");
                     JOptionPane.showMessageDialog(WelcomePage.frame, "ERROR: Bad Identifier!", "",  JOptionPane.ERROR_MESSAGE);
                     packageField.setText("");
                     return;
                 }
+                //Set checking clashes as false.
+                else{
+                    checkClashes = false;
+                }
+
                 //Identifier valid and locking field
                 packageField.setEnabled(false);
                 enteredPackage = true;

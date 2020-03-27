@@ -1,4 +1,6 @@
 package com.cs474Hw2;
+import com.Checker.Checker;
+import com.Checker.FindPackage;
 import com.DesignPatternFactory.Factory;
 import com.DesignPatternFactory.Log;
 import com.intellij.ui.content.ContentFactory;
@@ -7,6 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.HashSet;
 
 public class FactoryPage extends DesignPageTemplate {
     JTextField interfaceField, classField, methodField, packageField;
@@ -17,6 +21,13 @@ public class FactoryPage extends DesignPageTemplate {
     JPanel panel;
     Logger logger;
 
+    Checker checker;
+    String packagePath;
+    boolean checkClashes;
+    File packageFile;
+    HashSet<String> identifiers;
+    HashSet<String> methodIdentifiers;
+
     FactoryPage() {
         //Get logger.
         logger = Log.getLogger();
@@ -25,6 +36,10 @@ public class FactoryPage extends DesignPageTemplate {
         //Get Factory code generator.
         logger.trace("Calling Factory generator.");
         factoryBuilder = new Factory();
+
+        checker = new Checker();
+        identifiers = new HashSet<>();
+        methodIdentifiers = new HashSet<>();
 
         //Set the path of the user's project root.
         logger.trace("Setting user project path.");
@@ -142,6 +157,15 @@ public class FactoryPage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String interfaceName = interfaceField.getText();
                 logger.trace("interfaceField entered: {}", interfaceName);
+
+                //Checking name clashes
+                logger.trace("Checking name clashes.");
+                if(!checkClashes(checkClashes, checker, packagePath, packageFile, WelcomePage.frame, interfaceName, interfaceField,  identifiers)){
+                    //Name clashes found
+                    logger.trace("Name clashes found.");
+                    return;
+                }
+
                 //Check if identifier is valid
                 if(!factoryBuilder.setInterfaceName(interfaceName)){
                     logger.trace("interfaceField is invalid");
@@ -149,8 +173,10 @@ public class FactoryPage extends DesignPageTemplate {
                     interfaceField.setText("");
                     return;
                 }
+
                 logger.trace("interfaceField is valid");
                 //Identifier valid and locking field/
+                identifiers.add(interfaceName);
                 enteredInterface = true;
                 interfaceField.setEnabled(false);
                 if(enteredMethods && enteredPackage && enteredClass){
@@ -165,6 +191,15 @@ public class FactoryPage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String className = classField.getText();
                 logger.trace("classField entered: {}", className);
+
+                //Checking name clashes
+                logger.trace("Checking name clashes.");
+                if(!checkClashes(checkClashes, checker, packagePath, packageFile, WelcomePage.frame, className, classField,  identifiers)){
+                    //Name clashes found
+                    logger.trace("Name clashes found.");
+                    return;
+                }
+
                 //Check if identifier is valid
                 if(!factoryBuilder.setConcreteClassNames(className)){
                     logger.trace("classField is invalid");
@@ -174,6 +209,7 @@ public class FactoryPage extends DesignPageTemplate {
                 }
                 //Identifier valid and clearing field/
                 logger.trace("classField is valid");
+                identifiers.add(className);
                 classField.setText("");
                 enteredClass = true;
                 if(enteredMethods && enteredPackage && enteredInterface){
@@ -189,6 +225,16 @@ public class FactoryPage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String methodName = methodField.getText();
                 logger.trace("methodField entered: {}", methodName);
+
+                //Checking method name clashes;
+                logger.trace("Checking method name clashes.");
+                if(methodIdentifiers.contains(methodName)){
+                    logger.trace("methodField is invalid.");
+                    JOptionPane.showMessageDialog(WelcomePage.frame, "ERROR: Name Clash!", "",  JOptionPane.ERROR_MESSAGE);
+                    methodField.setText("");
+                    return;
+                }
+
                 //Check if identifier is valid
                 if(!factoryBuilder.setAbstractMethods(methodName)){
                     logger.trace("methodField is invalid.");
@@ -198,6 +244,7 @@ public class FactoryPage extends DesignPageTemplate {
                 }
                 //Identifier valid and clearing field/
                 logger.trace("methodField is valid.");
+                methodIdentifiers.add(methodName);
                 methodField.setText("");
                 enteredMethods = true;
                 if(enteredPackage && enteredClass && enteredInterface){
@@ -233,13 +280,30 @@ public class FactoryPage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String packageName = packageField.getText();
                 logger.trace("packageField entered: {}", packageName);
+                logger.trace("Looking if package exists.");
+                packagePath = FindPackage.findPackage(packageName, new File(WelcomePage.path));
+
+                //Check if package already exists. Parse package if exists.
+                logger.trace("Checking if package exists in project.");
+                if(packagePath != null){
+                    logger.trace("Checking if package exists in project.");
+                    packageFile = new File(packagePath);
+                    factoryBuilder.setPath(packageFile.getParentFile().getAbsolutePath());
+                    factoryBuilder.setFolderName(packageName);
+                    checkClashes = true;
+                }
                 //Check if identifier is valid
-                if(!factoryBuilder.setFolderName(packageName)){
+                else if(!factoryBuilder.setFolderName(packageName)){
                     logger.trace("packageField is invalid");
                     JOptionPane.showMessageDialog(WelcomePage.frame, "ERROR: Bad Identifier!", "",  JOptionPane.ERROR_MESSAGE);
                     packageField.setText("");
                     return;
                 }
+                //Set checking clashes as false.
+                else{
+                    checkClashes = false;
+                }
+
                 //Identifier valid and clearing field/
                 logger.trace("packageField is valid");
                 packageField.setEnabled(false);

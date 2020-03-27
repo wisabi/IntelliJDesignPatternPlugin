@@ -1,4 +1,6 @@
 package com.cs474Hw2;
+import com.Checker.Checker;
+import com.Checker.FindPackage;
 import com.DesignPatternFactory.Chain;
 import com.DesignPatternFactory.Log;
 import com.intellij.ui.content.ContentFactory;
@@ -7,6 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.HashSet;
 
 public class ChainPage extends DesignPageTemplate {
 
@@ -17,11 +21,19 @@ public class ChainPage extends DesignPageTemplate {
     boolean enteredAbstractHandler, enteredFinalReceiver, enteredReceiver, enteredPackage;
     JPanel panel;
     Logger logger;
+    Checker checker;
+    String packagePath;
+    boolean checkClashes;
+    File packageFile;
+    HashSet<String> identifiers;
 
     ChainPage() {
         //Get logger instance.
         logger = Log.getLogger();
         logger.trace("Entering ChainPage.");
+
+        checker = new Checker();
+        identifiers = new HashSet<>();
 
         //Calling Chain builder.
         logger.trace("Calling Chain generator.");
@@ -147,6 +159,16 @@ public class ChainPage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String abstractHandlerName = abstractHandlerField.getText();
                 logger.trace("abstractHandlerField entered: {}", abstractHandlerName);
+
+
+                //Checking for name clashes
+                logger.trace("Checking name clashes.");
+                if(!checkClashes(checkClashes, checker, packagePath, packageFile, WelcomePage.frame, abstractHandlerName, abstractHandlerField,  identifiers)){
+                    //Clash found
+                    logger.trace("Name clashes found.");
+                    return;
+                }
+
                 //Checking identifier validity
                 if (!chainBuilder.setAbstractHandlerClassName(abstractHandlerName)) {
                     logger.trace("abstractHandlerField invalid.");
@@ -154,8 +176,10 @@ public class ChainPage extends DesignPageTemplate {
                     abstractHandlerField.setText("");
                     return;
                 }
+
                 //Identifier valid and locking field/
                 enteredAbstractHandler = true;
+                identifiers.add(abstractHandlerName);
                 abstractHandlerField.setEnabled(false);
                 logger.trace("abstractHandlerField valid.");
                 if (enteredReceiver && enteredFinalReceiver && enteredPackage) {
@@ -174,6 +198,15 @@ public class ChainPage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String finalReceiverName = finalReceiverField.getText();
                 logger.trace("finalReceiverField entered: {}", finalReceiverName);
+
+                //Checking for name clashes
+                logger.trace("Checking name clashes.");
+                if(!checkClashes(checkClashes, checker, packagePath, packageFile, WelcomePage.frame, finalReceiverName, finalReceiverField,  identifiers)){
+                    //Clash found
+                    logger.trace("Name clashes found.");
+                    return;
+                }
+
                 //Checking identifier validity
                 if (!chainBuilder.setFinalReceiverClassName(finalReceiverName)) {
                     logger.trace("finalReceiverField is invalid");
@@ -181,8 +214,10 @@ public class ChainPage extends DesignPageTemplate {
                     finalReceiverField.setText("");
                     return;
                 }
+
                 //Identifier valid and locking field/
                 logger.trace("finalReceiverField is valid");
+                identifiers.add(finalReceiverName);
                 enteredFinalReceiver = true;
                 finalReceiverField.setEnabled(false);
                 if (enteredAbstractHandler && enteredReceiver && enteredPackage) {
@@ -201,6 +236,15 @@ public class ChainPage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String methodName = receiverField.getText();
                 logger.trace("receiverField entered: {}", methodName);
+
+                //Checking for name clashes
+                logger.trace("Checking name clashes.");
+                if(!checkClashes(checkClashes, checker, packagePath, packageFile, WelcomePage.frame, methodName, receiverField,  identifiers)){
+                    //Clash found
+                    logger.trace("Name clashes found.");
+                    return;
+                }
+
                 //Checking identifier validity
                 if (!chainBuilder.setReceiverClassNames(methodName)) {
                     //Activate build button
@@ -209,7 +253,9 @@ public class ChainPage extends DesignPageTemplate {
                     receiverField.setText("");
                     return;
                 }
+
                 //Identifier valid and clearing field.
+                identifiers.add(methodName);
                 logger.trace("receiverField is valid");
                 receiverField.setText("");
                 enteredReceiver = true;
@@ -250,14 +296,30 @@ public class ChainPage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String packageName = packageField.getText();
                 logger.trace("packageField entered: {}", packageName);
-                //Checking identifier validity
-                if (!chainBuilder.setFolderName(packageName)) {
-                    logger.trace("packageField is invalid.");
-                    JOptionPane.showMessageDialog(WelcomePage.frame, "ERROR: Bad Identifier!", "", JOptionPane.ERROR_MESSAGE);
+                logger.trace("Looking if package exists.");
+                packagePath = FindPackage.findPackage(packageName, new File(WelcomePage.path));
+
+                //Check if package already exists. Parse package if exists.
+                logger.trace("Checking if package exists in project.");
+                if(packagePath != null){
+                    logger.trace("Checking if package exists in project.");
+                    packageFile = new File(packagePath);
+                    chainBuilder.setPath(packageFile.getParentFile().getAbsolutePath());
+                    chainBuilder.setFolderName(packageName);
+                    checkClashes = true;
+                }
+                //Check if identifier is valid
+                else if(!chainBuilder.setFolderName(packageName)){
+                    logger.trace("packageField is invalid");
+                    JOptionPane.showMessageDialog(WelcomePage.frame, "ERROR: Bad Identifier!", "",  JOptionPane.ERROR_MESSAGE);
                     packageField.setText("");
-                    logger.trace("buildButton is activated.");
                     return;
                 }
+                //Set checking clashes as false.
+                else{
+                    checkClashes = false;
+                }
+
                 //Identifier valid and locking field/
                 logger.trace("packageField is valid.");
                 packageField.setEnabled(false);

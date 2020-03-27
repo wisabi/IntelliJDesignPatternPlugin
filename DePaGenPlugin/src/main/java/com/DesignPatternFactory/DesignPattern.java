@@ -9,7 +9,7 @@ public abstract class DesignPattern {
     protected abstract void getPatternAttributes();
     protected abstract String printCodeString();
     protected abstract String createCodeFiles();
-    String path;
+    public String path;
     String folderName;
     final public void setPath(String path){
         this.path = path;

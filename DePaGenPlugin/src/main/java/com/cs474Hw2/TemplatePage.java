@@ -1,4 +1,6 @@
 package com.cs474Hw2;
+import com.Checker.Checker;
+import com.Checker.FindPackage;
 import com.DesignPatternFactory.Log;
 import com.DesignPatternFactory.Template;
 import com.intellij.ui.content.ContentFactory;
@@ -7,22 +9,34 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.HashSet;
 
 public class TemplatePage extends DesignPageTemplate {
 
-    JTextField     abstractClassField, abstractMethodField, finalMethodField, packageField, concreteClassField;
+    JTextField abstractClassField, abstractMethodField, finalMethodField, packageField, concreteClassField;
     ActionListener abstractClassAction, abstractMethodAction, finalMethodAction, packageAction, buildAction, concreteClassAction;
     boolean enteredAbstractClass, enteredAbstractMethod, enteredFinalMethod , enteredConcreteClass, enteredPackage;
     Template templateBuilder;
     JButton buildButton;
     JPanel panel;
     Logger logger;
+    Checker checker;
+    String packagePath;
+    boolean checkClashes;
+    File packageFile;
+    HashSet<String> identifiers;
+    HashSet<String> methods;
 
 
     TemplatePage(){
         //Get logger.
         logger = Log.getLogger();
         logger.trace("Entering TemplatePage.");
+
+        checker = new Checker();
+        identifiers = new HashSet<>();
+        methods = new HashSet<>();
 
         //Get Template code generator.
         logger.trace("Calling Template generator.");
@@ -165,6 +179,15 @@ public class TemplatePage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String abstractClassName = abstractClassField.getText();
                 logger.trace("abstractClassField entered: {}", abstractClassName);
+
+                //Checking for name clashes
+                logger.trace("Checking name clashes.");
+                if(!checkClashes(checkClashes, checker, packagePath, packageFile, WelcomePage.frame, abstractClassName, abstractClassField,  identifiers)){
+                    //Clash found
+                    logger.trace("Name clashes found.");
+                    return;
+                }
+
                 //Check if identifier is valid.
                 if(!templateBuilder.setAbstractClassName(abstractClassName)){
                     JOptionPane.showMessageDialog(WelcomePage.frame, "ERROR: Bad Identifier!", "",  JOptionPane.ERROR_MESSAGE);
@@ -173,6 +196,7 @@ public class TemplatePage extends DesignPageTemplate {
                     return;
                 }
                 //Identifier valid and locking field
+                identifiers.add(abstractClassName);
                 enteredAbstractClass = true;
                 abstractClassField.setEnabled(false);
                 logger.trace("abstractClassField is valid.");
@@ -191,6 +215,16 @@ public class TemplatePage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String abstractMethod = abstractMethodField.getText();
                 logger.trace("abstractMethodField entered: {}", abstractMethod);
+
+                //Checking method name clashes;
+                logger.trace("Checking method name clashes.");
+                if(methods.contains(abstractMethod)){
+                    logger.trace("methodField is invalid.");
+                    JOptionPane.showMessageDialog(WelcomePage.frame, "ERROR: Name Clash!", "",  JOptionPane.ERROR_MESSAGE);
+                    abstractMethodField.setText("");
+                    return;
+                }
+
                 //Check if identifier is valid.
                 if(!templateBuilder.setAbstractMethods(abstractMethod)){
                     logger.trace("abstractMethodField is invalid.");
@@ -199,6 +233,7 @@ public class TemplatePage extends DesignPageTemplate {
                     return;
                 }
                 logger.trace("abstractMethodField is valid.");
+                methods.add(abstractMethod);
                 //Identifier valid and clearing field
                 abstractMethodField.setText("");
                 enteredAbstractMethod = true;
@@ -217,6 +252,16 @@ public class TemplatePage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String finalMethod = finalMethodField.getText();
                 logger.trace("finalMethodField entered: {}", finalMethod);
+
+                //Checking method name clashes;
+                logger.trace("Checking method name clashes.");
+                if(methods.contains(finalMethod)){
+                    logger.trace("methodField is invalid.");
+                    JOptionPane.showMessageDialog(WelcomePage.frame, "ERROR: Name Clash!", "",  JOptionPane.ERROR_MESSAGE);
+                    finalMethodField.setText("");
+                    return;
+                }
+
                 //Check if identifier is valid.
                 if(!templateBuilder.setFinalMethods(finalMethod)){
                     logger.trace("finalMethodField is invalid.");
@@ -224,6 +269,8 @@ public class TemplatePage extends DesignPageTemplate {
                     finalMethodField.setText("");
                     return;
                 }
+
+                methods.add(finalMethod);
                 logger.trace("finalMethodField is invalid.");
                 //Identifier valid and clearing field
                 finalMethodField.setText("");
@@ -243,6 +290,15 @@ public class TemplatePage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String concreteClass = concreteClassField.getText();
                 logger.trace("concreteClassField entered: {}", concreteClass);
+
+                //Checking for name clashes
+                logger.trace("Checking name clashes.");
+                if(!checkClashes(checkClashes, checker, packagePath, packageFile, WelcomePage.frame, concreteClass, concreteClassField,  identifiers)){
+                    //Clash found
+                    logger.trace("Name clashes found.");
+                    return;
+                }
+
                 //Check if identifier is valid.
                 if(!templateBuilder.setConcreteClasses(concreteClass)){
                     logger.trace("concreteClassField is invalid.");
@@ -250,6 +306,7 @@ public class TemplatePage extends DesignPageTemplate {
                     finalMethodField.setText("");
                     return;
                 }
+                identifiers.add(concreteClass);
                 logger.trace("concreteClassField is valid.");
                 //Identifier valid and clearing field
                 concreteClassField.setText("");
@@ -292,13 +349,30 @@ public class TemplatePage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String packageName = packageField.getText();
                 logger.trace("packageField entered: {}", packageName);
-                //Check if identifier is valid.
-                if(!templateBuilder.setFolderName(packageName)){
-                    logger.trace("packageField is invalid.");
+                logger.trace("Looking if package exists.");
+                packagePath = FindPackage.findPackage(packageName, new File(WelcomePage.path));
+
+                //Check if package already exists. Parse package if exists.
+                logger.trace("Checking if package exists in project.");
+                if(packagePath != null){
+                    logger.trace("Checking if package exists in project.");
+                    packageFile = new File(packagePath);
+                    templateBuilder.setPath(packageFile.getParentFile().getAbsolutePath());
+                    templateBuilder.setFolderName(packageName);
+                    checkClashes = true;
+                }
+                //Check if identifier is valid
+                else if(!templateBuilder.setFolderName(packageName)){
+                    logger.trace("packageField is invalid");
                     JOptionPane.showMessageDialog(WelcomePage.frame, "ERROR: Bad Identifier!", "",  JOptionPane.ERROR_MESSAGE);
                     packageField.setText("");
                     return;
                 }
+                //Set checking clashes as false.
+                else{
+                    checkClashes = false;
+                }
+
                 //Identifier valid and locking field/
                 logger.trace("packageField is valid.");
                 packageField.setEnabled(false);

@@ -73,6 +73,7 @@ public class CreateFile {
     public String CreateFolder(String currentDirectory ,String folderName){
         logger.trace("Entering CreateFile.CreateFolder()");
 
+        //folderPath = currentDirectory + "/" + folderName;
         folderPath = currentDirectory + "/" + folderName;
 
         try{
@@ -87,6 +88,7 @@ public class CreateFile {
             logger.trace("Exiting due to folder creation failure");
             System.exit(1);
         }
+        System.out.println("FOLDER PATH" + folderPath);
         return folderPath;
     }
 

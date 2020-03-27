@@ -1,4 +1,6 @@
 package com.cs474Hw2;
+import com.Checker.Checker;
+import com.Checker.FindPackage;
 import com.DesignPatternFactory.Log;
 import com.DesignPatternFactory.Visitor;
 import com.intellij.ui.content.ContentFactory;
@@ -7,6 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.HashSet;
 
 public class VisitorPage extends DesignPageTemplate {
 
@@ -20,11 +24,20 @@ public class VisitorPage extends DesignPageTemplate {
     JButton buildButton;
     JPanel panel;
     Logger logger;
+    Checker checker;
+    String packagePath;
+    boolean checkClashes;
+    File packageFile;
+    HashSet<String> identifiers, elementMethods;
 
     VisitorPage(){
         //Get logger.
         logger = Log.getLogger();
         logger.trace("Entering VisitorPage.");
+
+        checker = new Checker();
+        identifiers = new HashSet<>();
+        elementMethods = new HashSet<>();
 
         //Get Template code generator.
         logger.trace("Calling Visitor generator.");
@@ -180,6 +193,14 @@ public class VisitorPage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String elementInterface = elementInterfaceField.getText();
                 logger.trace("elementInterfaceField entered: {}", elementInterface);
+
+                //Checking for name clashes
+                logger.trace("Checking name clashes.");
+                if(!checkClashes(checkClashes, checker, packagePath, packageFile, WelcomePage.frame, elementInterface, elementInterfaceField,  identifiers)){
+                    //Clash found
+                    logger.trace("Name clashes found.");
+                    return;
+                }
                 //Check if identifier is valid.
                 if(!visitorBuilder.setElementInterfaceStr(elementInterface)){
                     logger.trace("elementInterfaceField is invalid.");
@@ -188,6 +209,7 @@ public class VisitorPage extends DesignPageTemplate {
                     return;
                 }
                 //Identifier valid and locking field
+                identifiers.add(elementInterface);
                 logger.trace("elementInterfaceField is valid.");
                 enteredElementInterface = true;
                 elementInterfaceField.setEnabled(false);
@@ -204,6 +226,16 @@ public class VisitorPage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String elementMethod = elementMethodsField.getText();
                 logger.trace("elementMethod entered: {}", elementMethodsField);
+
+                //Checking method name clashes;
+                logger.trace("Checking method name clashes.");
+                if(elementMethods.contains(elementMethod)){
+                    logger.trace("methodField is invalid.");
+                    JOptionPane.showMessageDialog(WelcomePage.frame, "ERROR: Name Clash!", "",  JOptionPane.ERROR_MESSAGE);
+                    elementMethodsField.setText("");
+                    return;
+                }
+
                 //Check if identifier is valid.
                 if(!visitorBuilder.setElementMethods(elementMethod)){
                     logger.trace("elementMethodsField is invalid.");
@@ -212,6 +244,7 @@ public class VisitorPage extends DesignPageTemplate {
                     return;
                 }
                 logger.trace("elementMethodsField is valid");
+                elementMethods.add(elementMethod);
                 //Identifier valid and clearing field
                 elementMethodsField.setText("");
                 enteredElementMethods = true;
@@ -228,6 +261,15 @@ public class VisitorPage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String concreteElements = concreteElementsField.getText();
                 logger.trace("concreteElements entered: {}", concreteElements);
+
+                //Checking for name clashes
+                logger.trace("Checking name clashes.");
+                if(!checkClashes(checkClashes, checker, packagePath, packageFile, WelcomePage.frame, concreteElements, concreteElementsField,  identifiers)){
+                    //Clash found
+                    logger.trace("Name clashes found.");
+                    return;
+                }
+
                 //Check if identifier is valid.
                 if(!visitorBuilder.setConcreteElements(concreteElements)){
                     logger.trace("concreteElements is invalid.");
@@ -235,7 +277,9 @@ public class VisitorPage extends DesignPageTemplate {
                     concreteElementsField.setText("");
                     return;
                 }
+
                 logger.trace("concreteElements is valid.");
+                identifiers.add(concreteElements);
                 //Identifier valid and clearing field
                 concreteElementsField.setText("");
                 enteredConcreteElements = true;
@@ -252,6 +296,15 @@ public class VisitorPage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String  visitorInterface = visitorInterfaceField.getText();
                 logger.trace("visitorInterfaceField entered: {}", visitorInterface);
+
+                //Checking for name clashes
+                logger.trace("Checking name clashes.");
+                if(!checkClashes(checkClashes, checker, packagePath, packageFile, WelcomePage.frame, visitorInterface, visitorInterfaceField,  identifiers)){
+                    //Clash found
+                    logger.trace("Name clashes found.");
+                    return;
+                }
+
                 //Check if identifier is valid.
                 if(!visitorBuilder.setVisitorInterfaceStr( visitorInterface)){
                     logger.trace("visitorInterfaceField is invalid.");
@@ -260,6 +313,7 @@ public class VisitorPage extends DesignPageTemplate {
                     return;
                 }
                 //Identifier valid and locking field
+                identifiers.add(visitorInterface);
                 logger.trace("visitorInterfaceField is valid.");
                 visitorInterfaceField.setEnabled(false);
                 enteredVisitorInterface = true;
@@ -276,6 +330,15 @@ public class VisitorPage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String concreteVisitor = concreteVisitorsField.getText();
                 logger.trace("concreteVisitorsField entered: {}", concreteVisitor);
+
+                //Checking for name clashes
+                logger.trace("Checking name clashes.");
+                if(!checkClashes(checkClashes, checker, packagePath, packageFile, WelcomePage.frame, concreteVisitor, concreteVisitorsField,  identifiers)){
+                    //Clash found
+                    logger.trace("Name clashes found.");
+                    return;
+                }
+
                 //Check if identifier is valid.
                 if(!visitorBuilder.setConcreteVisitors(concreteVisitor)){
                     logger.trace("concreteVisitorsField is invalid.");
@@ -284,6 +347,7 @@ public class VisitorPage extends DesignPageTemplate {
                     return;
                 }
                 logger.trace("concreteVisitorsField is valid.");
+                identifiers.add(concreteVisitor);
                 //Identifier valid and clearing field
                 concreteVisitorsField.setText("");
                 enteredConcreteVisitors = true;
@@ -317,13 +381,30 @@ public class VisitorPage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String packageName = packageField.getText();
                 logger.trace("packageField entered: {}", packageName);
-                //Check if identifier is valid.
-                if(!visitorBuilder.setFolderName(packageName)){
-                    logger.trace("packageField is invalid.");
+                logger.trace("Looking if package exists.");
+                packagePath = FindPackage.findPackage(packageName, new File(WelcomePage.path));
+
+                //Check if package already exists. Parse package if exists.
+                logger.trace("Checking if package exists in project.");
+                if(packagePath != null){
+                    logger.trace("Checking if package exists in project.");
+                    packageFile = new File(packagePath);
+                    visitorBuilder.setPath(packageFile.getParentFile().getAbsolutePath());
+                    visitorBuilder.setFolderName(packageName);
+                    checkClashes = true;
+                }
+                //Check if identifier is valid
+                else if(!visitorBuilder.setFolderName(packageName)){
+                    logger.trace("packageField is invalid");
                     JOptionPane.showMessageDialog(WelcomePage.frame, "ERROR: Bad Identifier!", "",  JOptionPane.ERROR_MESSAGE);
                     packageField.setText("");
                     return;
                 }
+                //Set checking clashes as false.
+                else{
+                    checkClashes = false;
+                }
+
                 //Identifier valid and locking field
                 logger.trace("packageField is valid.");
                 packageField.setEnabled(false);

@@ -1,4 +1,6 @@
 package com.cs474Hw2;
+import com.Checker.Checker;
+import com.Checker.FindPackage;
 import com.DesignPatternFactory.Log;
 import com.DesignPatternFactory.Mediator;
 import com.intellij.ui.content.ContentFactory;
@@ -7,6 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.HashSet;
 
 public class MediatorPage extends DesignPageTemplate {
 
@@ -17,11 +21,19 @@ public class MediatorPage extends DesignPageTemplate {
     JButton buildButton;
     JPanel panel;
     Logger logger;
+    Checker checker;
+    String packagePath;
+    boolean checkClashes;
+    File packageFile;
+    HashSet<String> identifiers;
 
     MediatorPage(){
         //Get logger.
         logger = Log.getLogger();
         logger.trace("Entering MediatorPage.");
+
+        checker = new Checker();
+        identifiers = new HashSet<>();
 
         //Get Mediator code generator.
         logger.trace("Calling Mediator generator.");
@@ -147,6 +159,15 @@ public class MediatorPage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String mediatorAbstract = mediatorAbstractField.getText();
                 logger.trace("mediatorAbstractField entered: {}", mediatorAbstract);
+
+                //Checking for name clashes
+                logger.trace("Checking name clashes.");
+                if(!checkClashes(checkClashes, checker, packagePath, packageFile, WelcomePage.frame, mediatorAbstract, mediatorAbstractField,  identifiers)){
+                    //Clash found
+                    logger.trace("Name clashes found.");
+                    return;
+                }
+
                 //Check if identifier is valid.
                 if(!mediatorBuilder.setMediatorAbstractClassName(mediatorAbstract)){
                     logger.trace("mediatorAbstractField is invalid.");
@@ -155,6 +176,7 @@ public class MediatorPage extends DesignPageTemplate {
                     return;
                 }
                 logger.trace("mediatorAbstractField is valid.");
+                identifiers.add(mediatorAbstract);
                 //Identifier valid and locking field/
                 enteredMediatorAbstract = true;
                 mediatorAbstractField.setEnabled(false);
@@ -173,6 +195,15 @@ public class MediatorPage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String mediator = mediatorField.getText();
                 logger.trace("mediatorField entered: {}", mediator);
+
+                //Checking for name clashes
+                logger.trace("Checking name clashes.");
+                if(!checkClashes(checkClashes, checker, packagePath, packageFile, WelcomePage.frame, mediator, mediatorField,  identifiers)){
+                    //Clash found
+                    logger.trace("Name clashes found.");
+                    return;
+                }
+
                 //Check if identifier is valid.
                 if(!mediatorBuilder.setMediatorNames(mediator)){
                     logger.trace("mediatorField is invalid.");
@@ -181,6 +212,7 @@ public class MediatorPage extends DesignPageTemplate {
                     return;
                 }
                 logger.trace("mediatorField is valid.");
+                identifiers.add(mediator);
                 //Identifier valid and clearing field
                 mediatorField.setText("");
                 enteredMediator = true;
@@ -199,6 +231,15 @@ public class MediatorPage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String colleague = colleagueField.getText();
                 logger.trace("colleagueField entered: {}", colleague);
+
+                //Checking for name clashes
+                logger.trace("Checking name clashes.");
+                if(!checkClashes(checkClashes, checker, packagePath, packageFile, WelcomePage.frame, colleague, colleagueField,  identifiers)){
+                    //Clash found
+                    logger.trace("Name clashes found.");
+                    return;
+                }
+
                 //Check if identifier is valid.
                 if(!mediatorBuilder.setColleagueNames(colleague)){
                     logger.trace("colleagueField is invalid.");
@@ -209,6 +250,7 @@ public class MediatorPage extends DesignPageTemplate {
                 logger.trace("colleagueField is valid.");
                 //Identifier valid and clearing field.
                 colleagueField.setText("");
+                identifiers.add(colleague);
                 enteredColleague = true;
                 if(enteredMediatorAbstract && enteredMediator && enteredPackage){
                     //Activate build button
@@ -249,13 +291,30 @@ public class MediatorPage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String packageName = packageField.getText();
                 logger.trace("packageField entered: {}", packageName);
-                //Check if identifier is valid.
-                if(!mediatorBuilder.setFolderName(packageName)){
+                logger.trace("Looking if package exists.");
+                packagePath = FindPackage.findPackage(packageName, new File(WelcomePage.path));
+
+                //Check if package already exists. Parse package if exists.
+                logger.trace("Checking if package exists in project.");
+                if(packagePath != null){
+                    logger.trace("Checking if package exists in project.");
+                    packageFile = new File(packagePath);
+                    mediatorBuilder.setPath(packageFile.getParentFile().getAbsolutePath());
+                    mediatorBuilder.setFolderName(packageName);
+                    checkClashes = true;
+                }
+                //Check if identifier is valid
+                else if(!mediatorBuilder.setFolderName(packageName)){
                     logger.trace("packageField is invalid");
                     JOptionPane.showMessageDialog(WelcomePage.frame, "ERROR: Bad Identifier!", "",  JOptionPane.ERROR_MESSAGE);
                     packageField.setText("");
                     return;
                 }
+                //Set checking clashes as false.
+                else{
+                    checkClashes = false;
+                }
+
                 logger.trace("packageField is valid");
                 //Identifier valid and locking field
                 packageField.setEnabled(false);

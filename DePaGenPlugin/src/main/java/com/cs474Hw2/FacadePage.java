@@ -1,13 +1,16 @@
 package com.cs474Hw2;
+import com.Checker.Checker;
+import com.Checker.FindPackage;
 import com.DesignPatternFactory.Facade;
 import com.DesignPatternFactory.Log;
-import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import org.slf4j.Logger;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.HashSet;
 
 public class FacadePage extends DesignPageTemplate {
     JTextField abstractFacadeField, facadeClassField, forwardedClassesField, packageField;
@@ -17,11 +20,19 @@ public class FacadePage extends DesignPageTemplate {
     JButton buildButton;
     JPanel panel;
     Logger logger;
+    Checker checker;
+    String packagePath;
+    boolean checkClashes;
+    File packageFile;
+    HashSet<String> identifiers;
 
     public FacadePage() {
         //Getting logger instance.
         logger = Log.getLogger();
         logger.trace("Entering FacadePage.");
+
+        checker = new Checker();
+        identifiers = new HashSet<>();
 
         //Calling facade generator constructor.
         logger.trace("Calling Facade generator.");
@@ -145,6 +156,16 @@ public class FacadePage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String abstractFacade = abstractFacadeField.getText();
                 logger.trace("abstractFacadeField entered: {}", abstractFacade);
+
+                //Checking for name clashes
+                logger.trace("Checking name clashes.");
+                if(!checkClashes(checkClashes, checker, packagePath, packageFile, WelcomePage.frame, abstractFacade, abstractFacadeField,  identifiers)){
+                    //Clash found
+                    logger.trace("Name clashes found.");
+                    return;
+                }
+
+
                 //Checking identifier validity.
                 if(!facadeBuilder.setAbstractFacadeClassName(abstractFacade)){
                     logger.trace("abstractFacadeField is invalid.");
@@ -152,7 +173,9 @@ public class FacadePage extends DesignPageTemplate {
                     abstractFacadeField.setText("");
                     return;
                 }
+
                 logger.trace("abstractFacadeField is valid.");
+                identifiers.add(abstractFacade);
                 //Locking field
                 enteredAbstractFacadeField = true;
                 abstractFacadeField.setEnabled(false);
@@ -172,6 +195,15 @@ public class FacadePage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String facadeClassName = facadeClassField.getText();
                 logger.trace("facadeClassField entered: {}", facadeClassName);
+
+                //Checking for name clashes
+                logger.trace("Checking name clashes.");
+                if(!checkClashes(checkClashes, checker, packagePath, packageFile, WelcomePage.frame, facadeClassName, facadeClassField,  identifiers)){
+                    //Clash found
+                    logger.trace("Name clashes found.");
+                    return;
+                }
+
                 //Checking identifier validity.
                 if(!facadeBuilder.setFacadeClassName(facadeClassName)){
                     logger.trace("facadeClassField is invalid");
@@ -179,8 +211,10 @@ public class FacadePage extends DesignPageTemplate {
                     facadeClassField.setText("");
                     return;
                 }
+
                 //Clearing field
                 facadeClassField.setText("");
+                identifiers.add(facadeClassName);
                 enteredFacadeClassField = true;
                 if(enteredAbstractFacadeField && enteredForwardedField && enteredPackage){
                     //Activate build button
@@ -197,6 +231,15 @@ public class FacadePage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String forwardedClasses = forwardedClassesField.getText();
                 logger.trace("forwardedClassesField entered: {}", forwardedClasses);
+
+                //Checking for name clashes
+                logger.trace("Checking name clashes.");
+                if(!checkClashes(checkClashes, checker, packagePath, packageFile, WelcomePage.frame, forwardedClasses, forwardedClassesField,  identifiers)){
+                    //Clash found
+                    logger.trace("Name clashes found.");
+                    return;
+                }
+
                 //Checking identifier validity.
                 if(!facadeBuilder.setForwardedClassesNames(forwardedClasses)){
                     logger.trace("forwardedClassesField is invalid");
@@ -204,8 +247,11 @@ public class FacadePage extends DesignPageTemplate {
                     forwardedClassesField.setText("");
                     return;
                 }
+
                 logger.trace("forwardedClassesField is valid.");
+                identifiers.add(forwardedClasses);
                 //Clearing field
+
                 forwardedClassesField.setText("");
                 enteredForwardedField = true;
                 if(enteredAbstractFacadeField && enteredFacadeClassField && enteredPackage){
@@ -245,13 +291,30 @@ public class FacadePage extends DesignPageTemplate {
             public void actionPerformed(ActionEvent actionEvent) {
                 String packageName = packageField.getText();
                 logger.trace("packageField entered: {}", packageName);
-                //Checking identifier validity.
-                if(!facadeBuilder.setFolderName(packageName)){
+                logger.trace("Looking if package exists.");
+                packagePath = FindPackage.findPackage(packageName, new File(WelcomePage.path));
+
+                //Check if package already exists. Parse package if exists.
+                logger.trace("Checking if package exists in project.");
+                if(packagePath != null){
+                    logger.trace("Checking if package exists in project.");
+                    packageFile = new File(packagePath);
+                    facadeBuilder.setPath(packageFile.getParentFile().getAbsolutePath());
+                    facadeBuilder.setFolderName(packageName);
+                    checkClashes = true;
+                }
+                //Check if identifier is valid
+                else if(!facadeBuilder.setFolderName(packageName)){
                     logger.trace("packageField is invalid");
                     JOptionPane.showMessageDialog(WelcomePage.frame, "ERROR: Bad Identifier!", "",  JOptionPane.ERROR_MESSAGE);
                     packageField.setText("");
                     return;
                 }
+                //Set checking clashes as false.
+                else{
+                    checkClashes = false;
+                }
+
                 logger.trace("packageField is valid");
                 //locking field
                 packageField.setEnabled(false);
