@@ -14,7 +14,7 @@ This application is a plugin for IntelliJ. It generates Java design pattern code
 * Visitor  
 * Template  
 
-Users will also be prompted about class, interface, and method identifiers in order to generate each design pattern. The user will also be prompted to provide a package name to save these generated .java files. The packaged directory will be saved at the user's project root.
+Users will also be prompted about class, interface, and method identifiers in order to generate each design pattern. The user will also be prompted to provide a package name to save these generated .java files. If the user provides an existing package name that is within the projectRoot/src directory, then the generated files will be saved in the existing package. If the user provides a new package name, then a new directory will be created within the projectRoot/src directory. There must be a src directory within the project file hierarchy. Name clashes are checked for classes, interfaces, enums within a package scope. The user will be prompted with an error message if a clash error occurs. 
 
 ## Design Implementation
 The DePaCoG project design applies three design patterns: Singleton, Factory, and Template.
@@ -61,7 +61,7 @@ This will open a new instance of IntelliJ IDEA. The plugin will be docked on the
 ![](./DePaGenPlugin/images/image02.png)
 3. Click the next button.
 ![](./DePaGenPlugin/images/image04.png)
-4. Enter the Design Pattern attributes (press enter once attribute is typed). If an attribute is singular (e.g. Factory pattern having a single interface), the entry field will be disabled once entered. If an attribute can have more than one (multiple methods), then the textfield dissapear once enterd to allow for more attributes to be entered.
+4. Enter the Design Pattern attributes (press enter once attribute is typed). If an attribute is singular (e.g. Factory pattern having a single interface), the entry field will be disabled once entered. If an attribute can have more than one (multiple methods), then the textfield dissapear once entered to allow for more attributes to be entered.
 ![](./DePaGenPlugin/images/image05.png)
 5. Once all entries are entered, click on the Generate Code button to create the package.
 ![](./DePaGenPlugin/images/image03.png)
